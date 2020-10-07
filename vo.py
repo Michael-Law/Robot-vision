@@ -24,7 +24,7 @@ def readimage(path,time):
     return imglist
 
 #Extracting features and descriptors from the image(t) and image(t+1)
-def feature_detection(image_pair):
+def Orb_feature_detection(image_pair):
     orb = cv2.ORB_create(edgeThreshold=15, patchSize=31, nlevels=8, fastThreshold=20, scaleFactor=1.2, WTA_K=2,scoreType=cv2.ORB_HARRIS_SCORE, firstLevel=0, nfeatures=500)
     kp0 = orb.detect(image_pair[0],None)
     kp1 = orb.detect(image_pair[1],None)
