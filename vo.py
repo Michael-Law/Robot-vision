@@ -32,6 +32,31 @@ def Orb_feature_detection(image_pair):
     kp1,des1 = orb.compute(image_pair[1],kp1)
     return kp0 ,kp1 ,des0, des1
 
+def Surf_feature_detection(image_pair):
+    surf = cv2.SURF(500)
+    kp0 = surf.detect(image_pair[0],None)
+    kp1 = surf.detect(image_pair[1],None)
+    kp0,des0 = surf.compute(image_pair[0],kp0)
+    kp1,des1 = surf.compute(image_pair[1],kp1)
+    return kp0 ,kp1 ,des0, des1
+
+def Akaze_feature_detection(image_pair):
+    kaze = cv2.AKAZE_create(500)
+    kp0 = kaze.detect(image_pair[0],None)
+    kp1 = kaze.detect(image_pair[1],None)
+    kp0,des0 = kaze.compute(image_pair[0],kp0)
+    kp1,des1 = kaze.compute(image_pair[1],kp1)
+    return kp0 ,kp1 ,des0, des1    
+
+def Fast_feature_detection(image_pair):
+    fast = cv2.FastFeatureDetector(500)
+    kp0 = fast.detect(image_pair[0],None)
+    kp1 = fast.detect(image_pair[1],None)
+    kp0,des0 = fast.compute(image_pair[0],kp0)
+    kp1,des1 = fast.compute(image_pair[1],kp1)
+    return kp0 ,kp1 ,des0, des1    
+    
+
 images = readimage('./rgb',0)
 kep,kep0,des,des0 = feature_detection(images)
 
