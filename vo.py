@@ -129,5 +129,14 @@ class Visual_Odometry:
 
 vo = Visual_Odometry("./data_1", "Orb", 500)
 
-for Rotational, Translational in vo.RotationalAndTranslational():
-    print(Rotational)
+
+import matplotlib.pyplot as plt
+
+
+for __, __ in vo.RotationalAndTranslational():
+    for data in vo.keypointsMatching[0]:
+        timefilteredForce = plt.scatter(data[0], data[1])
+        timefilteredForce = plt.xlabel("points")
+        timefilteredForce = plt.ylabel("Force")
+
+    plt.show()
