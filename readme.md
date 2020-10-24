@@ -1,0 +1,1 @@
+For the purpose of the first year project; a qualitative analysis of methods for robot localisation was given. Here is the code for visual odometry.
