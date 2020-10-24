@@ -15,12 +15,11 @@ class Visual_Odometry:
         self.framesPath = framesPath
         self.time = 0
 
-    @property
     def increment_time(self):
         self.time += 1
 
     # capture two sequential image starting from time_n
-    @property
+
     def readimage(self):
         imglist = []
         for index, entries in enumerate(os.listdir(self.framesPath)):
@@ -36,7 +35,7 @@ class Visual_Odometry:
         return imglist
 
     # Extracting features and descriptors from the image(t) and image(t+1)
-    @property
+
     def featureExtraction(self):
         def Orb_feature_detection():
             orb = cv2.ORB_create(
@@ -66,7 +65,7 @@ class Visual_Odometry:
 
         def keypointsANDdescriptors(featureExtraction_method):
             successivepoints = []
-            for image in self.readimage:
+            for image in self.readimage():
                 keypoint = featureExtraction_method.detect(image, None)
                 keypoint, descriptor = featureExtraction_method.compute(image, keypoint)
                 successivepoints.append(keypoint)
@@ -84,12 +83,11 @@ class Visual_Odometry:
 
         return kep
 
-    @property
     def keypointsMatching(self):
         matcher = cv2.DescriptorMatcher_create(cv2.DescriptorMatcher_FLANNBASED)
         knn_matches = matcher.knnMatch(
-            np.float32(self.featureExtraction[3]),
-            np.float32(self.featureExtraction[1]),
+            np.float32(self.featureExtraction()[3]),
+            np.float32(self.featureExtraction()[1]),
             2,
         )
 
@@ -98,15 +96,14 @@ class Visual_Odometry:
 
         for i, (m, n) in enumerate(knn_matches):
             if m.distance < 0.7 * n.distance:
-                # matchesMask[i] = [1, 0]
-                pts0.append(self.featureExtraction[0][m.trainIdx].pt)
-                pts1.append(self.featureExtraction[2][n.queryIdx].pt)
+
+                pts0.append(self.featureExtraction()[0][m.trainIdx].pt)
+                pts1.append(self.featureExtraction()[2][n.queryIdx].pt)
 
         return np.int32(pts0), np.int32(pts1)
 
-    @property
     def EssentialMatrix(self):
-        pts1, pts2 = self.keypointsMatching
+        pts1, pts2 = self.keypointsMatching()
         E, mask = cv2.findEssentialMat(
             pts1,
             pts2,
@@ -119,15 +116,11 @@ class Visual_Odometry:
         return E, mask
 
     def RotationalAndTranslational(self):
-        pts1, pts2 = self.keypointsMatching
-        E, mask = self.EssentialMatrix
         for __ in os.listdir(self.framesPath):
+            self.featureExtraction()
+            pts1, pts2 = self.keypointsMatching()
+            E, mask = self.EssentialMatrix()
             __, R, t, __ = cv2.recoverPose(E, pts1, pts2)
-            self.increment_time
             yield R, t
+            self.increment_time
 
-
-vo = Visual_Odometry("./data_1", "Orb", 500)
-
-for Rotational, Translational in vo.RotationalAndTranslational():
-    print(Rotational)
