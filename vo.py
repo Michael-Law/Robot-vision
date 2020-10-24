@@ -125,7 +125,6 @@ class Visual_Odometry:
             self.increment_time
 
 
-vo = Visual_Odometry("./data_1", "Orb", 500)
-# print(vo.keypointsMatching()[1])
-for Rotational, Translational in vo.RotationalAndTranslational():
-    print(Rotational)
+# vo = Visual_Odometry("./data_1", "Orb", 500)
+# for Rotational, Translational in vo.RotationalAndTranslational():
+#     print(Rotational)
