@@ -3,17 +3,15 @@ from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 from vo import Visual_Odometry
 
-# plt.style.use("seaborn-whitegrid")
+plt.style.use("seaborn-whitegrid")
 
-# vo = Visual_Odometry("./data_1", "Orb", 500)
-# for index, (__, __) in enumerate(vo.RotationalAndTranslational()):
-#     for data in vo.keypointsMatching:
-#         query = data[0]
-#         train = data[1]
-#         plt.plot(query[0], query[1], marker="o")
-#         plt.plot(train[0], train[1], marker="+")
-#         plt.savefig("./pictures/plot_{}.png".format(index))
 
+vo = Visual_Odometry("./data_1", "Orb", 500)
+for index, (__, __) in enumerate(vo.RotationalAndTranslational()):
+    for query, train in zip(vo.keypointsMatching()[0], vo.keypointsMatching()[1]):
+        plt.plot(query[0], query[1], marker="o")
+        plt.plot(train[0], train[1], marker="+")
+    plt.savefig("./pictures/plot_{}.png".format(index))
 
 import cv2
 import numpy as np
