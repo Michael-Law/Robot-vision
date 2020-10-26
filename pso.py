@@ -3,10 +3,11 @@ from random import sample
 import numpy as np
 import cv2
 import math
+import matplotlib.pyplot as plt
 
 W = 0.5
-c1 = 0.8
-c2 = 0.9
+c1 = 0.3
+c2 = 0.5
 
 n_iterations = int(input("Inform the number of iterations: "))
 target_error = float(input("Inform the target error: "))
@@ -25,7 +26,7 @@ class Particle:
 
     def __str__(self):
 
-        print(self.position, " meu pbest is ", self.pbest_position)
+        print(self.position, "pbest is ", self.pbest_position)
 
     def move(self):
         self.position = self.position + self.velocity
@@ -45,7 +46,7 @@ class Space:
             particle.__str__()
 
     def fitness(self, particle):
-        # return particle.position[0] ** 2 + particle.position[1] ** 2 + 1
+
         return sum(
             flow[math.floor(particle.position[0]), math.floor(particle.position[1])]
         )
@@ -118,9 +119,15 @@ while iteration < n_iterations:
     iteration += 1
 
 print(
-    "The best solution is: ",
+    "The point of perspective is at : ",
     search_space.gbest_position,
     " in n_iterations: ",
     iteration,
+    convergence,
 )
 
+plt.imshow(frame2)
+plt.plot(
+    search_space.gbest_position[0], search_space.gbest_position[1], "or", markersize=10
+)  # og:shorthand for green circle
+plt.show()
